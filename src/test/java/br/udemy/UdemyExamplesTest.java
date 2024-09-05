@@ -6,12 +6,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -19,7 +23,7 @@ import java.util.Stack;
 import java.util.stream.Stream;
 
 
-class FooBarTest {
+class UdemyExamplesTest {
 
     public static String nomeTeste;
     public static Stack<String> testes;
@@ -66,17 +70,38 @@ class FooBarTest {
             "Godofredo da Silva e Santos, 2009, 15"
     })
     void testWithParamethersFromCsvSource(String nome, Integer anoNascimento, Integer idadeEsperada) {
-        System.out.println("Calculando idade de %s".formatted(nome));
+        System.out.printf("Calculando idade de %s%n", nome);
         Assertions.assertEquals(LocalDate.now().getYear() - anoNascimento, idadeEsperada);
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "/tests/parametersForCsvTest.csv")
     void testWithParamethersFromCsvFile(String nome, Integer anoNascimento, Integer idadeEsperada) {
-        System.out.println("Calculando idade de %s".formatted(nome));
+        System.out.printf("Calculando idade de %s%n", nome);
         Assertions.assertEquals(LocalDate.now().getYear() - anoNascimento, idadeEsperada);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"Thiago", "Rudolf", "Nahdia"})
+    void testWithParametersFromValueSource(String nome) {
+        System.out.printf("Nome recebido %s%n", nome);
+        Assertions.assertEquals(6, nome.length());
+    }
+
+    @RepeatedTest(3)
+    void testRepeatedTestWIthRepetionInfo(RepetitionInfo repetitionInfo) {
+        System.out.printf("Repeticao atual: %d%n", repetitionInfo.getCurrentRepetition());
+    }
+
+    @RepeatedTest(3)
+    void testRepeatedTestWIthRepetionInfoAndTestInfo(RepetitionInfo repetitionInfo, TestInfo testInfo) {
+        System.out.printf("Repeticao atual: %d%n", repetitionInfo.getCurrentRepetition());
+        testInfo.getTestMethod().ifPresentOrElse( testName -> {
+            System.out.printf("Nome do teste: %s%n", testName);
+        }, () -> {
+            System.out.println("Metodo sem nome");
+        });
+    }
 
     public static Stream<Arguments> generatorForTestWithParameters() {
         //Ano Nascimento - Ano Atual - Idade esperada
