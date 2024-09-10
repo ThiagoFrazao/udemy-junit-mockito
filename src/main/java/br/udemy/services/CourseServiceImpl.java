@@ -1,30 +1,32 @@
 package br.udemy.services;
 
-import lombok.extern.slf4j.Slf4j;
+import br.udemy.models.Course;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Slf4j
 public class CourseServiceImpl implements CourseService {
 
-    private final HashMap<String, List<String>> cursosAluno;
+    private final HashMap<String, List<Course>> cursosAluno;
+
+    private final List<Course> cursosDisponiveis;
 
     public CourseServiceImpl() {
         this.cursosAluno = new HashMap<>();
+        this.cursosDisponiveis = new ArrayList<>();
     }
 
+    @Override
+    public List<Course> recuperarCursosPorNomeAluno(String nomeAluno) {
+        return this.cursosAluno.computeIfAbsent(nomeAluno, k -> new ArrayList<>());
+    }
 
     @Override
-    public List<String> recuperarCursos(String nomeAluno) {
-        List<String> retorno = cursosAluno.get(nomeAluno);
-        if(retorno == null) {
-            System.out.println("Aluno sem curso");
-            retorno = new ArrayList<>();
-            this.cursosAluno.put(nomeAluno, retorno);
-        }
-        return retorno;
+    public Course recuperarCursoPorNomeCurso(String nomeCurso) {
+        return this.cursosDisponiveis.stream().filter(curso -> curso.getNome().equals(nomeCurso))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Curso nao encontrado %s".formatted(nomeCurso)));
     }
 
 }

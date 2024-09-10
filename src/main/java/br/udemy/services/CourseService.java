@@ -1,7 +1,12 @@
 package br.udemy.services;
 
+import br.udemy.models.Course;
+
 import java.util.List;
 
 public interface CourseService {
-    List<String> recuperarCursos(String nomeAluno);
+    List<Course> recuperarCursosPorNomeAluno(String nomeAluno);
+
+    Course recuperarCursoPorNomeCurso(String nomeCurso);
+
 }
