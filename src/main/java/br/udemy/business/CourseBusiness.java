@@ -1,5 +1,6 @@
 package br.udemy.business;
 
+import br.udemy.exceptions.UnrecoverableException;
 import br.udemy.models.Course;
 import br.udemy.services.CourseService;
 import org.apache.maven.surefire.shared.lang3.StringUtils;
@@ -29,7 +30,7 @@ public class CourseBusiness {
         try {
             return this.courseService.recuperarCursoPorNomeCurso(nomeCurso);
         } catch (Exception e) {
-            return null;
+            throw new UnrecoverableException(e.getMessage());
         }
     }
 

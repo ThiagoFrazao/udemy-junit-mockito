@@ -1,5 +1,6 @@
 package br.udemy.business;
 
+import br.udemy.exceptions.UnrecoverableException;
 import br.udemy.models.Course;
 import br.udemy.services.CourseService;
 import br.udemy.services.CourseServiceImpl;
@@ -65,6 +66,25 @@ class CoreBusinessTest {
         Assertions.assertNotNull(course);
         Assertions.assertEquals(nomeCurso, course.getNome());
         Assertions.assertEquals(temaCurso, course.getTema());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Falha esperada do teste"})
+    void testCourseNameThrownsUnrecoverableException(String errorMsg) {
+        try {
+            final String nomeCurso = "FALHA_CURSO";
+            Mockito.when(courseBusiness.recuperarCursoPorNome(nomeCurso))
+                    .thenThrow(new UnrecoverableException(errorMsg));
+            courseBusiness.recuperarCursoPorNome(nomeCurso);
+            Assertions.fail("Deveria ter lancado uma exception %s".formatted(UnrecoverableException.class.getSimpleName()));
+        } catch (Exception e) {
+            Assertions.assertEquals(UnrecoverableException.class, e.getClass());
+            Assertions.assertEquals(errorMsg, e.getMessage());
+        }
+    }
+
+    void testDeleteCourseWithoutReturn() {
+
     }
 
     private List<Course> gerarCursosAluno() {

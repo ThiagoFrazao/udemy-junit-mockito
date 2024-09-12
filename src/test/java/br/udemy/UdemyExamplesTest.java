@@ -95,7 +95,7 @@ class UdemyExamplesTest {
 
     @RepeatedTest(3)
     void testRepeatedTestWIthRepetionInfoAndTestInfo(RepetitionInfo repetitionInfo, TestInfo testInfo) {
-        System.out.printf("Repeticao atual: %d%n", repetitionInfo.getCurrentRepetition());
+        System.out.printf("Repeticao atual: %d%n".formatted(repetitionInfo.getCurrentRepetition()));
         testInfo.getTestMethod().ifPresentOrElse( testName -> {
             System.out.printf("Nome do teste: %s%n", testName);
         }, () -> {
