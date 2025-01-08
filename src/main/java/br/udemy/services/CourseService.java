@@ -9,4 +9,8 @@ public interface CourseService {
 
     Course recuperarCursoPorNomeCurso(String nomeCurso);
 
+    boolean removerCurso(String nomeCurso);
+
+    void adicionarCurso(Course course);
+
 }

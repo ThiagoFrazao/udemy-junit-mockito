@@ -108,7 +108,6 @@ class UdemyExamplesTest {
         return Stream.of(Arguments.of(1993, LocalDate.now().getYear(), 31));
     }
 
-
     @AfterEach
     void tearDownAfter() {
         testes.pop();

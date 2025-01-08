@@ -6,7 +6,6 @@ import br.udemy.services.CourseService;
 import org.apache.maven.surefire.shared.lang3.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CourseBusiness {
 
@@ -23,7 +22,7 @@ public class CourseBusiness {
     public List<Course> recuperarCursosPorAlunoETema(String nomeAluno, String tema) {
         return this.recuperarCursosPorAluno(nomeAluno).stream()
                 .filter(curso -> StringUtils.containsIgnoreCase(curso.getNome(), tema))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Course recuperarCursoPorNome(String nomeCurso) {
@@ -32,6 +31,10 @@ public class CourseBusiness {
         } catch (Exception e) {
             throw new UnrecoverableException(e.getMessage());
         }
+    }
+
+    public void adicionarNovoCurso(Course novoCurso) {
+        this.courseService.adicionarCurso(novoCurso);
     }
 
 }

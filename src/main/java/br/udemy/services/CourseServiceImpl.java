@@ -29,4 +29,14 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new RuntimeException("Curso nao encontrado %s".formatted(nomeCurso)));
     }
 
+    @Override
+    public boolean removerCurso(String nomeCurso) {
+        return this.cursosDisponiveis.removeIf(curso -> curso.getNome().equals(nomeCurso));
+    }
+
+    @Override
+    public void adicionarCurso(Course course) {
+        this.cursosDisponiveis.add(course);
+    }
+
 }

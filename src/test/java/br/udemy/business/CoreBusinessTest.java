@@ -7,8 +7,10 @@ import br.udemy.services.CourseServiceImpl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -17,10 +19,11 @@ import java.util.List;
 class CoreBusinessTest {
 
     static CourseBusiness courseBusiness;
+    static CourseService courseService;
 
     @BeforeAll
     static void setUpBefore() {
-        final CourseService courseService = Mockito.mock(CourseServiceImpl.class);
+        courseService = Mockito.mock(CourseServiceImpl.class);
         courseBusiness = new CourseBusiness(courseService);
     }
 
@@ -83,9 +86,36 @@ class CoreBusinessTest {
         }
     }
 
-    void testDeleteCourseWithoutReturn() {
-
+    ///Verify: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
+    ///Service sera chamado com os parametros corretos!
+    ///Mockito.times verifica quantas vezes o metodo esperado pelo Mockito.verify foi chamado
+    @Test
+    void testVerifyAddCourseWithoutReturn() {
+        Course course = new Course("CursoNovo","GERENCIADOR");
+        courseBusiness.adicionarNovoCurso(course);
+        Mockito.verify(courseService, Mockito.times(1)).adicionarCurso(course);
     }
+
+    ///then: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
+    ///Service sera chamado com os parametros corretos!
+    ///Should - verifica se o metodo seguinte foi chamado
+    @Test
+    void testThenAddCourseWithoutReturn() {
+        Course course = new Course("CursoNovo","GERENCIADOR");
+        courseBusiness.adicionarNovoCurso(course);
+        BDDMockito.then(courseService).should().adicionarCurso(course);
+    }
+
+    ///then: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
+    ///Service sera chamado com os parametros corretos!
+    ///Should com Never - verifica se o metodo foi chamado, mas com um resultado diferente
+    @Test
+    void testThenNeverAddCourseDifferentName() {
+        Course course = new Course("CursoNovo","GERENCIADOR");
+        courseBusiness.adicionarNovoCurso(course);
+        BDDMockito.then(courseService).should(BDDMockito.never()).adicionarCurso(new Course("curso diferente"));
+    }
+
 
     private List<Course> gerarCursosAluno() {
         return gerarCursosAluno("Udemy", "Spring");
