@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
@@ -86,9 +87,11 @@ class CoreBusinessTest {
         }
     }
 
-    ///Verify: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
-    ///Service sera chamado com os parametros corretos!
-    ///Mockito.times verifica quantas vezes o metodo esperado pelo Mockito.verify foi chamado
+    /**
+     * Verify: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
+     * Service sera chamado com os parametros corretos!
+     * Mockito.times verifica quantas vezes o metodo esperado pelo Mockito.verify foi chamado
+     */
     @Test
     void testVerifyAddCourseWithoutReturn() {
         Course course = new Course("CursoNovo","GERENCIADOR");
@@ -96,9 +99,11 @@ class CoreBusinessTest {
         Mockito.verify(courseService, Mockito.times(1)).adicionarCurso(course);
     }
 
-    ///then: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
-    ///Service sera chamado com os parametros corretos!
-    ///Should - verifica se o metodo seguinte foi chamado
+    /**
+     * then: testar metodos sem retorno (void) - verifica se ao chamar um metodo do "Business" o metodo correto do
+     * Service sera chamado com os parametros corretos!
+     * Should - verifica se o metodo seguinte foi chamado
+     */
     @Test
     void testThenAddCourseWithoutReturn() {
         Course course = new Course("CursoNovo","GERENCIADOR");
@@ -114,6 +119,18 @@ class CoreBusinessTest {
         Course course = new Course("CursoNovo","GERENCIADOR");
         courseBusiness.adicionarNovoCurso(course);
         BDDMockito.then(courseService).should(BDDMockito.never()).adicionarCurso(new Course("curso diferente"));
+    }
+
+    /**
+     * ArgumentCapture: captura os parametros enviados a um Mock para que possam ser validados
+     */
+    @Test
+    void testArgumentCapture() {
+        ArgumentCaptor<Course> captor = ArgumentCaptor.forClass(Course.class);
+        Course course = new Course("CursoNovo","GERENCIADOR");
+        courseBusiness.adicionarNovoCurso(course);
+        BDDMockito.then(courseService).should().adicionarCurso(captor.capture());
+        Assertions.assertEquals(course, captor.getValue());
     }
 
 
