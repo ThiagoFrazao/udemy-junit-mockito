@@ -33,8 +33,9 @@ public class GreetingController {
             return ResponseEntity.badRequest().body(new Greeting(-1L,
                     "Falha %s ao gerar greeting: %s".formatted(e.getClass().getSimpleName(), e.getMessage())));
         }
-
     }
+
+
 
 
 }
