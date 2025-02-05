@@ -5,4 +5,9 @@ public class FalhaBancoDados extends RuntimeException {
     public FalhaBancoDados(Exception e) {
         super(e);
     }
+
+    public FalhaBancoDados(String message) {
+        super(message);
+    }
+
 }
