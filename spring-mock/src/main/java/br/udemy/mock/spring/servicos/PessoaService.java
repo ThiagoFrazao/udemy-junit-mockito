@@ -24,7 +24,14 @@ public class PessoaService {
 
     public Pessoa cadastrar(Pessoa pessoa) {
         try {
-          return this.pessoaRepository.save(pessoa);
+            final Pessoa pessoaCpf = this.pessoaRepository.findPessoaByCpf(pessoa.getCpf());
+            if (pessoaCpf == null) {
+                return this.pessoaRepository.save(pessoa);
+            } else {
+                throw new FalhaDadosInvalidosBancoException("ja existe alguem cadastrado com esse CPF", "Pessoa");
+            }
+        } catch (FalhaBancoDados e) {
+            throw e;
         } catch (Exception e) {
             throw new FalhaBancoDados(e);
         }

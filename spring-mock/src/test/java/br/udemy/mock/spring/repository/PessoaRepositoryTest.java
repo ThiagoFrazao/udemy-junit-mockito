@@ -47,6 +47,4 @@ class PessoaRepositoryTest {
         Assertions.assertTrue(savedEmail.equals(email) && savedEmail.equals(saved.getEmail()));
     }
 
-
-
 }
